@@ -330,82 +330,49 @@
     </div>
 
     <script>
+      // 1. 아이콘 초기화
       lucide.createIcons();
 
-      function scrollToBeta() {
-        const target = document.getElementById("beta-section");
-        target.scrollIntoView({ behavior: "smooth" });
+      // 2. 배경 애니메이션 설정 (에러 방지를 위해 위로 올림)
+      const canvas = document.getElementById("bg");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
 
-        gtag("event", "click_cta_main", {
-          event_category: "engagement",
-          event_label: "hero_ai_start_button",
-        });
-      }
-
-      function submitForm() {
-        const emailInput = document.getElementById("emailInput");
-        const email = emailInput.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!email || !emailRegex.test(email)) {
-          alert("유효한 이메일을 입력해주세요!");
-          return;
-        }
-
-        const GOOGLE_FORM_URL =
-          "https://docs.google.com/forms/d/e/1FAIpQLScxkk6Eoze35-4cXapTrhqNQTaHvL1O8ImNDCTapbwV_QOIhA/viewform?usp=header";
-        const ENTRY_ID = "entry.1009512706";
-
-        const formData = new FormData();
-        formData.append(ENTRY_ID, email);
-
-        fetch(GOOGLE_FORM_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: formData,
-        })
-          .then(() => {
-            gtag("event", "generate_lead", {
-              event_category: "conversion",
-              event_label: "beta_test_signup",
-              method: "email",
-            });
-
-            alert(
-              email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.",
-            );
-            emailInput.value = "";
-          })
-          .catch((err) => {
-            console.error("전송 에러:", err);
-            alert("죄송합니다. 전송 중 오류가 발생했습니다.");
+      function initParticles() {
+        particles = [];
+        const count = window.innerWidth < 600 ? 30 : 60;
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
           });
+        }
       }
 
       function resize() {
+        if (!canvas) return; // 캔버스가 없으면 실행 안 함
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         initParticles();
       }
+
       window.addEventListener("resize", resize);
-      resize();
+      resize(); // 초기화 실행
 
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         for (let i = 0; i < particles.length; i++) {
           let p = particles[i];
           p.x += p.vx;
           p.y += p.vy;
-
           if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
           if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
           ctx.beginPath();
           ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
           ctx.fillStyle = "rgba(59, 130, 246, 0.4)";
           ctx.fill();
-
           for (let j = i + 1; j < particles.length; j++) {
             let p2 = particles[j];
             let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
@@ -422,6 +389,49 @@
         requestAnimationFrame(animate);
       }
       animate();
+
+      // 3. 버튼 클릭 및 폼 전송 함수
+      function scrollToBeta() {
+        document
+          .getElementById("beta-section")
+          .scrollIntoView({ behavior: "smooth" });
+        gtag("event", "click_cta_main");
+      }
+
+      function submitForm() {
+        const emailInput = document.getElementById("emailInput");
+        const email = emailInput.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email || !emailRegex.test(email)) {
+          alert("유효한 이메일을 입력해주세요!");
+          return;
+        }
+
+        const GOOGLE_FORM_URL =
+          "https://docs.google.com/forms/d/e/1FAIpQLScxkk6Eoze35-4cXapTrhqNQTaHvL1O8ImNDCTapbwV_QOIhA/formResponse";
+        const ENTRY_ID = "entry.1009512706";
+
+        const formData = new FormData();
+        formData.append(ENTRY_ID, email);
+
+        fetch(GOOGLE_FORM_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData,
+        })
+          .then(() => {
+            gtag("event", "generate_lead", { method: "email" });
+            alert(
+              email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.",
+            );
+            emailInput.value = "";
+          })
+          .catch((err) => {
+            console.error("전송 에러:", err);
+            alert("오류가 발생했습니다.");
+          });
+      }
     </script>
   </body>
 </html>

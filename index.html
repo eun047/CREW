@@ -126,7 +126,6 @@
         padding: 60px 20px 100px;
       }
 
-      /* Feature Cards */
       .features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -173,7 +172,6 @@
         word-break: keep-all;
       }
 
-      /* CTA Section */
       .cta-section {
         background: linear-gradient(
           135deg,
@@ -242,7 +240,6 @@
         color: #4b5563;
       }
 
-      /* Mobile Layout */
       @media (max-width: 600px) {
         .form-box {
           flex-direction: column;
@@ -277,7 +274,6 @@
     </section>
 
     <div class="container">
-      <!-- Features -->
       <div class="features">
         <div class="feature">
           <div class="icon-box"><i data-lucide="bar-chart-3"></i></div>
@@ -292,7 +288,7 @@
         </div>
 
         <div class="feature">
-          <div class="icon-box"><i data-lucide="zap"></i></div>
+          <div class="icon-box"><i data-lucide="handshake"></i></div>
           <h3>광고 매칭</h3>
           <p>채널의 정체성을 가장 잘 살려줄 브랜드와의 협업 기회.</p>
         </div>
@@ -326,14 +322,12 @@
         </div>
       </div>
 
-      <footer>&copy; 2026 Aura Design. All rights reserved.</footer>
+      <footer>&copy; 2026 Aura. All rights reserved.</footer>
     </div>
 
     <script>
-      // 1. 아이콘 초기화
       lucide.createIcons();
 
-      // 2. 배경 애니메이션 설정 (에러 방지를 위해 위로 올림)
       const canvas = document.getElementById("bg");
       const ctx = canvas.getContext("2d");
       let particles = [];
@@ -352,14 +346,14 @@
       }
 
       function resize() {
-        if (!canvas) return; // 캔버스가 없으면 실행 안 함
+        if (!canvas) return;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         initParticles();
       }
 
       window.addEventListener("resize", resize);
-      resize(); // 초기화 실행
+      resize();
 
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -390,7 +384,6 @@
       }
       animate();
 
-      // 3. 버튼 클릭 및 폼 전송 함수
       function scrollToBeta() {
         document
           .getElementById("beta-section")
@@ -423,7 +416,7 @@
           .then(() => {
             gtag("event", "generate_lead", { method: "email" });
             alert(
-              email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.",
+              email + "님, 신청이 완료되었습니다! \n베타 오픈 시 연락드릴게요.",
             );
             emailInput.value = "";
           })

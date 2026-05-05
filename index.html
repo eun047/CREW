@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CREW | Creator Roadmap</title>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      :root {
+        --primary: #3b82f6;
+        --secondary: #06b6d4;
+        --bg: #05070a; /* 더 깊고 진해진 배경색 */
+        --card-bg: rgba(17, 24, 39, 0.4);
+        --text-main: #ffffff;
+        --text-dim: #94a3b8;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Pretendard",
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text-main);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .badge {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        color: var(--primary);
+        margin-bottom: 24px;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: clamp(3.5rem, 10vw, 5.5rem);
+        margin: 0;
+        font-weight: 800;
+        letter-spacing: -2px;
+        background: linear-gradient(to bottom, #ffffff 40%, #64748b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        color: var(--text-dim);
+        max-width: 600px;
+        margin: 24px auto 40px;
+      }
+
+      /* 메인 버튼 스타일 */
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 40px;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        border: none;
+        border-radius: 16px;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.5);
+      }
+
+      .btn:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.7);
+      }
+
+      /* Container */
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 100px 20px;
+      }
+
+      /* Feature Cards */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-bottom: 120px;
+      }
+
+      .feature {
+        background: var(--card-bg);
+        padding: 40px 30px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
+      }
+
+      .feature:hover {
+        border-color: var(--primary);
+        background: rgba(59, 130, 246, 0.03);
+      }
+
+      .icon-box {
+        width: 52px;
+        height: 52px;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        margin-bottom: 24px;
+      }
+
+      .feature h3 {
+        margin: 0 0 12px 0;
+        font-size: 1.3rem;
+      }
+
+      .feature p {
+        font-size: 0.95rem;
+        color: var(--text-dim);
+        margin: 0;
+      }
+
+      /* CTA Section (신청 섹션) */
+      .cta-section {
+        background: linear-gradient(
+          135deg,
+          rgba(17, 24, 39, 0.8) 0%,
+          rgba(5, 7, 10, 1) 100%
+        );
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        padding: 60px 40px;
+        border-radius: 32px;
+        text-align: center;
+        scroll-margin-top: 50px; /* 스크롤 위치 조절 */
+      }
+
+      .cta-section h2 {
+        font-size: 2rem;
+        margin-bottom: 16px;
+      }
+
+      .form-box {
+        margin-top: 40px;
+        display: flex;
+        gap: 12px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      input {
+        flex: 1;
+        padding: 16px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        font-size: 16px;
+        outline: none;
+        transition: border 0.3s;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+      }
+
+      .submit-btn {
+        padding: 16px 28px;
+        background: var(--primary);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .submit-btn:hover {
+        background: #2563eb;
+      }
+
+      footer {
+        text-align: center;
+        padding: 80px 0 40px;
+        font-size: 14px;
+        color: #4b5563;
+      }
+
+      @media (max-width: 600px) {
+        .form-box {
+          flex-direction: column;
+        }
+        h1 {
+          font-size: 3rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="bg"></canvas>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="badge">COMING SOON</div>
+      <h1>CREW</h1>
+      <p>
+        당신의 채널 성장을 위한 AI 정밀 로드맵.<br />
+        데이터로 승리하는 크리에이터가 되세요.
+      </p>
+      <button class="btn" onclick="scrollToBeta()">
+        <i data-lucide="sparkles"></i>
+        AI 분석 시작하기
+      </button>
+    </div>
+
+    <div class="container">
+      <!-- Features -->
+      <div class="features">
+        <div class="feature">
+          <div class="icon-box"><i data-lucide="bar-chart-3"></i></div>
+          <h3>채널 데이터 분석</h3>
+          <p>단순 수치를 넘어 시청 이탈 지점과 유입 경로를 정밀 분석합니다.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon-box"><i data-lucide="trending-up"></i></div>
+          <h3>성장 로드맵</h3>
+          <p>다음 목표 달성을 위해 필요한 구체적인 전략을 AI가 제안합니다.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon-box"><i data-lucide="zap"></i></div>
+          <h3>광고 매칭</h3>
+          <p>채널의 정체성을 가장 잘 살려줄 브랜드와의 협업 기회.</p>
+        </div>
+      </div>
+
+      <!-- Beta Form Section -->
+      <div id="beta-section" class="cta-section">
+        <div
+          class="badge"
+          style="
+            color: var(--secondary);
+            border-color: var(--secondary);
+            background: transparent;
+          "
+        >
+          PRE-REGISTER
+        </div>
+        <h2>베타 테스터 사전 모집</h2>
+        <p style="color: var(--text-dim)">
+          현재 정식 런칭을 앞두고 베타 서비스를 준비 중입니다.<br />
+          이메일을 등록하시면 분석 엔진 오픈 시 가장 먼저 우선권을 드립니다.
+        </p>
+
+        <div class="form-box">
+          <input type="email" id="emailInput" placeholder="이메일 주소 입력" />
+          <button class="submit-btn" onclick="submitForm()">우선권 신청</button>
+        </div>
+      </div>
+
+      <footer>&copy; 2026 Aura Design. All rights reserved.</footer>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      // 부드러운 스크롤 함수
+      function scrollToBeta() {
+        const target = document.getElementById("beta-section");
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function submitForm() {
+        const email = document.getElementById("emailInput").value;
+        if (!email) {
+          alert("이메일을 입력해주세요!");
+          return;
+        }
+        // 이메일 수집 로직 (예: 구글 폼 연결 등)
+        console.log("신청 이메일:", email);
+        alert(email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.");
+      }
+
+      /* 배경 애니메이션 - 어두운 배경에 맞게 투명도 조정 */
+      const canvas = document.getElementById("bg");
+      const ctx = canvas.getContext("2d");
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      let particles = [];
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(59, 130, 246, 0.4)";
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            let p2 = particles[j];
+            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 150) {
+              ctx.strokeStyle = `rgba(59, 130, 246, ${0.08 * (1 - dist / 150)})`;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+  </body>
+</html>

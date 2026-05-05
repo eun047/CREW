@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CREW | Creator Roadmap</title>
 
-    <!-- Google tag (gtag.js) -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-5KB1VCGSFK"
@@ -20,7 +19,6 @@
       gtag("config", "G-5KB1VCGSFK");
     </script>
 
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -57,7 +55,6 @@
         z-index: -1;
       }
 
-      /* Hero Section */
       .hero {
         height: 100vh;
         display: flex;
@@ -101,7 +98,6 @@
         word-break: keep-all;
       }
 
-      /* 메인 버튼 스타일 */
       .btn {
         display: flex;
         align-items: center;
@@ -124,7 +120,6 @@
         box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.7);
       }
 
-      /* Container */
       .container {
         max-width: 900px;
         margin: 0 auto;
@@ -268,7 +263,6 @@
   <body>
     <canvas id="bg"></canvas>
 
-    <!-- Hero -->
     <section class="hero">
       <div class="badge">Coming Soon</div>
       <h1>CREW</h1>
@@ -304,7 +298,6 @@
         </div>
       </div>
 
-      <!-- Beta Form Section -->
       <div id="beta-section" class="cta-section">
         <div
           class="badge"
@@ -337,24 +330,21 @@
     </div>
 
     <script>
-      // 1. 아이콘 초기화
       lucide.createIcons();
 
-      // 2. 부드러운 스크롤 + GA4 클릭 이벤트
       function scrollToBeta() {
         const target = document.getElementById("beta-section");
         target.scrollIntoView({ behavior: "smooth" });
 
-        // GA4 이벤트: 분석 시작하기 버튼 클릭
         gtag("event", "click_cta_main", {
           event_category: "engagement",
           event_label: "hero_ai_start_button",
         });
       }
 
-      // 3. 폼 제출 + GA4 리드 수집 이벤트
       function submitForm() {
-        const email = document.getElementById("emailInput").value;
+        const emailInput = document.getElementById("emailInput");
+        const email = emailInput.value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email || !emailRegex.test(email)) {
@@ -362,34 +352,34 @@
           return;
         }
 
-        // GA4 이벤트: 사전 신청 완료 (Lead 생성)
-        gtag("event", "generate_lead", {
-          event_category: "conversion",
-          event_label: "beta_test_signup",
-          method: "email",
-        });
+        const GOOGLE_FORM_URL =
+          "https://docs.google.com/forms/d/e/1FAIpQLScxkk6Eoze35-4cXapTrhqNQTaHvL1O8ImNDCTapbwV_QOIhA/viewform?usp=header";
+        const ENTRY_ID = "entry.1009512706";
 
-        console.log("신청 이메일:", email);
-        alert(email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.");
-        document.getElementById("emailInput").value = ""; // 입력란 초기화
-      }
+        const formData = new FormData();
+        formData.append(ENTRY_ID, email);
 
-      /* 4. 배경 애니메이션 최적화 */
-      const canvas = document.getElementById("bg");
-      const ctx = canvas.getContext("2d");
+        fetch(GOOGLE_FORM_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData,
+        })
+          .then(() => {
+            gtag("event", "generate_lead", {
+              event_category: "conversion",
+              event_label: "beta_test_signup",
+              method: "email",
+            });
 
-      let particles = [];
-      function initParticles() {
-        particles = [];
-        const count = window.innerWidth < 600 ? 30 : 60; // 모바일에서는 개수 최적화
-        for (let i = 0; i < count; i++) {
-          particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: (Math.random() - 0.5) * 0.4,
+            alert(
+              email + "님, 신청이 완료되었습니다! 베타 오픈 시 연락드릴게요.",
+            );
+            emailInput.value = "";
+          })
+          .catch((err) => {
+            console.error("전송 에러:", err);
+            alert("죄송합니다. 전송 중 오류가 발생했습니다.");
           });
-        }
       }
 
       function resize() {
